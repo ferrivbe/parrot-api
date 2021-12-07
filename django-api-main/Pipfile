@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+fluent-logger = "*"
+sentry-sdk = "*"
+django-extensions = "*"
+psycopg2-binary = "*"
+python-decouple = "*"
+djangorestframework = "*"
+drf-yasg = "*"
+gunicorn = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
