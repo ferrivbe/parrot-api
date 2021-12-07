@@ -77,7 +77,8 @@ class VerboseFluentRecordFormatter(FluentRecordFormatter):
             data = self._formatter(record)
             data[
                 "message"
-            ] = "Logger ({}) is receiving non serializable data, please check sentry.".format(
+            ] = """Logger ({}) is receiving non serializable data,
+            please check sentry.""".format(
                 record.name
             )
 

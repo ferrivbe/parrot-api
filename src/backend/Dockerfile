@@ -5,17 +5,16 @@ RUN apt-get update && \
     # compiler for Python C modules
     g++ make libc6-dev
 
-RUN python3.9 -m pip install pipenv
-
 WORKDIR /code
 COPY /src/backend /code/backend
 COPY /.docker /code/.docker
-COPY /Pipfile ../.env[t] /code/
-COPY /Pipfile.lock /code/
+COPY /requirements.txt /code
+
+RUN python3.9 -m pip install -r /code/requirements.txt
 
 EXPOSE 8000
 
-RUN pipenv install
+COPY /.docker/dev /usr/local/bin/
 
 RUN chmod +x .docker/docker-entrypoint.sh
 ENTRYPOINT [".docker/docker-entrypoint.sh"]

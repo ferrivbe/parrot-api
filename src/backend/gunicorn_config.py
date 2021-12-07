@@ -35,10 +35,11 @@ class MemoryWatch(threading.Thread):
             time.sleep(60)
             for (pid, worker) in list(self.server.WORKERS.items()):
                 pid_memory_usage = self.memory_usage(pid)
-                # self.server.log.info("PID %s memory usage: %sMB", pid, pid_memory_usage)
+
                 if pid_memory_usage >= self.restart_on_rss:
                     self.server.log.info(
-                        "restart_on_rss on PID %s, observed memory usage: %sMB",
+                        """restart_on_rss on PID %s,
+                        observed memory usage: %sMB""",
                         pid,
                         pid_memory_usage,
                     )

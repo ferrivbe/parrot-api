@@ -6,7 +6,7 @@ help:
 
 .PHONY: dev
 dev: ## run the project with development tools and configurations
-	@docker-compose up --build
+	@docker-compose --file docker-compose.dev.yml run --service-ports --rm backend || true
 
 .PHONY: up
 up: ## run the project
@@ -37,11 +37,3 @@ pull: ## update Docker images without losing local databases
 
 .PHONY: fromscratch
 fromscratch: reset pull up
-
-.PHONY: bash
-bash: ## drops you into a running container
-	@docker exec -it -e RUNTYPE=bash $$(docker ps|grep django-api-server_backend|awk '{ print $$1 }') /docker-entrypoint.sh || true
-
-.PHONY: rootbash
-rootbash: ## drops you into a running container as root
-	@docker exec -it -e RUNTYPE=bash --user=root $$(docker ps|grep django-api-server_backend|awk '{ print $$1 }') /docker-entrypoint.sh || true
