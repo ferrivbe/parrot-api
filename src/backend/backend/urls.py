@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
+from django.urls import include, path
 from rest_framework import permissions
 
 from drf_yasg import openapi
@@ -35,7 +35,9 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    # ping
+    # api
+    path("", include("api.urls")),
+    # health
     path("health", HealthView.as_view(), name="health"),
     # docs
     path(
