@@ -1,10 +1,13 @@
 """
 File name: api_validations.py
 Author: Fernando Rivera
-Creation date: 2021-07-23
+Creation date: 2021-12-08
 """
-from ..configurations.constants import GenericConstants
-from ..exceptions.api_exceptions import InternalServerErrorException
+from utils.configurations.constants import ExceptionConstants, GenericConstants
+from utils.exceptions.api_exceptions import (
+    ForbiddenEntityException,
+    InternalServerErrorException,
+)
 
 
 class ApiValidations:
@@ -35,3 +38,14 @@ class ApiValidations:
         """
         if (string is None) or (string == GenericConstants.EMPTY_CHAR):
             raise InternalServerErrorException()
+
+    def is_role_valid(self, role, expected_role):
+        """
+        Validates if role can perform action.
+        :param int role: The user role.
+        :param int expected_role: The role needed to perform action.
+        """
+        if role != expected_role:
+            raise ForbiddenEntityException(
+                ExceptionConstants.USER_ROLE_NOT_VALID % {GenericConstants.ROLE: role}
+            )

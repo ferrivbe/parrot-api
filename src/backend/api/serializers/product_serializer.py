@@ -18,5 +18,6 @@ class ProductSerializer(ModelSerializer):
         fields = [
             "name",
             "description",
+            "price",
         ]
         depth = 1

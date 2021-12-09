@@ -1,7 +1,7 @@
 """
 File name: exception.py
 Author: Fernando Rivera
-Creation date: 2021-07-19
+Creation date: 2021-12-08
 """
 import logging
 

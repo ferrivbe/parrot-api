@@ -31,7 +31,7 @@ class ProductByIdView(APIView):
         """
         Creates a new instance of ProductByIdView
         """
-        self.permission_classes = (permissions.AllowAny,)
+        self.permission_classes = (permissions.IsAuthenticated,)
         self.serializer = ProductSerializer
         self.service = ProductService()
         self.validator = ApiValidations()
@@ -43,14 +43,21 @@ class ProductByIdView(APIView):
                 "Authorization",
                 openapi.IN_HEADER,
                 "The user authorization.",
-                type="string",
+                type=openapi.TYPE_STRING,
             ),
             openapi.Parameter(
-                "id", openapi.IN_PATH, "The product identifier.", type="uuid4"
+                "id",
+                openapi.IN_PATH,
+                "The product identifier.",
+                type=openapi.TYPE_STRING,
+                format=openapi.FORMAT_UUID,
             ),
         ],
         responses={
             200: openapi.Response("Product deleted.", ProductResponseSerializer()),
+            401: openapi.Response(
+                "User not authorized.", ApiExceptionSerializer(many=False)
+            ),
             404: openapi.Response("Not found.", ApiExceptionSerializer(many=False)),
             500: openapi.Response(
                 "Internal server error.", ApiExceptionSerializer(many=False)
@@ -75,17 +82,21 @@ class ProductByIdView(APIView):
                 "Authorization",
                 openapi.IN_HEADER,
                 "The user authorization.",
-                type="string",
+                type=openapi.TYPE_STRING,
             ),
             openapi.Parameter(
                 "id",
                 openapi.IN_PATH,
                 "The product identifier.",
-                type="uuid4",
+                type=openapi.TYPE_STRING,
+                format=openapi.FORMAT_UUID,
             ),
         ],
         responses={
             200: openapi.Response("Product found.", ProductResponseSerializer()),
+            401: openapi.Response(
+                "User not authorized.", ApiExceptionSerializer(many=False)
+            ),
             404: openapi.Response("Not found.", ApiExceptionSerializer(many=False)),
             500: openapi.Response(
                 "Internal server error.", ApiExceptionSerializer(many=False)
@@ -110,17 +121,21 @@ class ProductByIdView(APIView):
                 "Authorization",
                 openapi.IN_HEADER,
                 "The user authorization.",
-                type="string",
+                type=openapi.TYPE_STRING,
             ),
             openapi.Parameter(
                 "id",
                 openapi.IN_PATH,
                 "The product identifier.",
-                type="uuid4",
+                type=openapi.TYPE_STRING,
+                format=openapi.FORMAT_UUID,
             ),
         ],
         responses={
             200: openapi.Response("Product found.", ProductResponseSerializer()),
+            401: openapi.Response(
+                "User not authorized.", ApiExceptionSerializer(many=False)
+            ),
             404: openapi.Response("Not found.", ApiExceptionSerializer(many=False)),
             422: openapi.Response(
                 "Resuest has errors", ApiExceptionSerializer(many=False)
@@ -159,7 +174,7 @@ class ProductView(APIView):
         """
         Creates a new instance of ProductView.
         """
-        self.permission_classes = (permissions.AllowAny,)
+        self.permission_classes = (permissions.IsAuthenticated,)
         self.serializer = ProductSerializer
         self.service = ProductService()
         self.validator = ApiValidations()
@@ -171,13 +186,15 @@ class ProductView(APIView):
                 "Authorization",
                 openapi.IN_HEADER,
                 "The user authorization.",
-                type="string",
+                type=openapi.TYPE_STRING,
             )
         ],
         request_body=ProductSerializer(),
         responses={
             201: openapi.Response("Product created.", ProductResponseSerializer()),
-            404: openapi.Response("Not found.", ApiExceptionSerializer(many=False)),
+            401: openapi.Response(
+                "User not authorized.", ApiExceptionSerializer(many=False)
+            ),
             422: openapi.Response("Bad request.", ApiExceptionSerializer(many=False)),
             500: openapi.Response(
                 "Internal server error.", ApiExceptionSerializer(many=False)
@@ -189,7 +206,7 @@ class ProductView(APIView):
         Creates the product.
 
         :param rest_framework.request request: The request.
-        :param uuid id: The menu identifier.
+        :param uuid id: The product identifier.
         """
         self.validator.is_null(request)
         request_serializer = self.serializer(data=request.data)

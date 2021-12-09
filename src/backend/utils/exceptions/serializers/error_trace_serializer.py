@@ -1,7 +1,7 @@
 """
 File name: error_trace_serializer.py
 Author: Fernando Rivera
-Creation date: 2021-07-20
+Creation date: 2021-12-08
 """
 from rest_framework import serializers
 

@@ -1,7 +1,7 @@
 """
 File name: api_exceptions.py
 Author: Fernando Rivera
-Creation date: 2021-07-19
+Creation date: 2021-12-08
 """
 from rest_framework.exceptions import APIException
 

@@ -34,6 +34,7 @@ class ProductRepository:
         return Product.objects.create(
             name=product.get(GenericConstants.NAME),
             description=product.get(GenericConstants.DESCRIPTION),
+            price=product.get(GenericConstants.PRICE),
         )
 
     def delete_product(self, product):
@@ -79,6 +80,7 @@ class ProductRepository:
 
         product.description = updated_product.get(GenericConstants.DESCRIPTION)
         product.name = updated_product.get(GenericConstants.NAME)
+        product.price = updated_product.get(GenericConstants.PRICE)
         product.updated_at = now()
         product.save()
 
