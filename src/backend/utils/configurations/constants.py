@@ -35,6 +35,11 @@ class ExceptionConstants:
     The exception when a user name already exists.
     """
 
+    ORDER_IS_CLOSED = "The order with id '%(id)s' is closed, no changes allowed"
+    """
+    The exception when order is closed.
+    """
+
     ORDER_NOT_FOUND = "The order with identifier '%(id)s' does not exist."
     """
     The exception when an order is not found.
@@ -53,6 +58,13 @@ class ExceptionConstants:
     PRODUCT_NAME_IS_REQUIRED = "The product requires a valid name"
     """
     The exception when the product name is not provided.
+    """
+
+    PRODUCT_NOT_AVAILABLE = (
+        "The product with id '%(id)s' does not exist or is no longer available."
+    )
+    """
+    Th exception when product is deleted or does not exist.
     """
 
     PARAMETER_INVALID_BY_REGEX = (

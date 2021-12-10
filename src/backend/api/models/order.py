@@ -45,6 +45,11 @@ class Order(models.Model):
     The external client, personal name or otherwise.
     """
 
+    closed_at = models.DateTimeField(default=None, null=True)
+    """
+    The closing data, determines when order was closed.
+    """
+
     created_at = models.DateTimeField(default=now, editable=False)
     """
     The creation date.

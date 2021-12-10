@@ -6,7 +6,7 @@ Creation date: 2021-12-08
 from rest_framework.serializers import ModelSerializer
 
 from api.models.product_quantity import ProductQuantity
-from api.serializers.product_serializer import ProductSerializer, ProductByIdSerializer
+from api.serializers.product_serializer import ProductByIdSerializer, ProductSerializer
 
 
 class ProductQuantitySerializer(ModelSerializer):

@@ -8,7 +8,8 @@ from django.utils.timezone import now
 
 from api.models.order import Order
 from api.models.product_quantity import ProductQuantity
-from utils.configurations.constants import GenericConstants
+from utils.configurations.constants import ExceptionConstants, GenericConstants
+from utils.exceptions.api_exceptions import UnprocessableEntityException
 from utils.validations.api_validations import ApiValidations
 
 
@@ -97,3 +98,29 @@ class OrderRepository:
         order.save()
 
         return order
+
+    def update_order_closure(self, order):
+        """
+        Updates the order closure.
+
+        :param Order order: The order to be closed.
+        """
+        self.validator.is_null(order)
+
+        order.closed_at = now()
+        order.updated_at = now()
+        order.save()
+
+        return order
+
+    def validate_order_closed(self, order):
+        """
+        Validates if order is closed.
+        If order is closed, no further changes are allowed.
+
+        :param Order order: The order to be validated.
+        """
+        if order.closed_at is not None:
+            raise UnprocessableEntityException(
+                ExceptionConstants.ORDER_IS_CLOSED % {GenericConstants.ID: order.id}
+            )

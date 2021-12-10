@@ -5,7 +5,7 @@ Creation date: 2021-12-07
 """
 from django.urls import path
 
-from api.views.order_view import OrderByIdView, OrderView
+from api.views.order_view import OrderByIdView, OrderClosureView, OrderView
 from api.views.product_quantity_view import ProductQuantityByIdView, ProductQuantityView
 from api.views.product_view import ProductByIdView, ProductView
 
@@ -31,6 +31,11 @@ urlpatterns = [
         "orders/<uuid:id>",
         OrderByIdView.as_view(),
         name="orders_id",
+    ),
+    path(
+        "orders/<uuid:id>/closures",
+        OrderClosureView.as_view(),
+        name="orders_id_closures",
     ),
     # Product quantity endpoints.
     path(

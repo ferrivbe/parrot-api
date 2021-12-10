@@ -93,6 +93,7 @@ class OrderService:
         orders = self.repository.get_order_by_id(id)
         self.__validate_order_exists(orders, id)
         self.__validate_order(order)
+        self.repository.validate_order_closed(orders.first())
 
         updated_order = self.repository.update_order_external_client(
             orders.first(),
@@ -101,6 +102,25 @@ class OrderService:
 
         return OrderResponseSerializer(
             updated_order,
+            many=False,
+        )
+
+    def update_order_closure(self, id):
+        """
+        Updates the order closure.
+
+        :param uuid4 id: The order identifier.
+        """
+        self.validator.is_null(id)
+
+        orders = self.repository.get_order_by_id(id)
+        self.__validate_order_exists(orders, id)
+        self.repository.validate_order_closed(orders.first())
+
+        closed_order = self.repository.update_order_closure(orders.first())
+
+        return OrderResponseSerializer(
+            closed_order,
             many=False,
         )
 

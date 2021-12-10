@@ -3,6 +3,7 @@ File name: product_quantity_service.py
 Author: Fernando Rivera
 Creation date: 2021-12-08
 """
+from api.repositories.order_repository import OrderRepository
 from api.repositories.product_quantity_repository import ProductQuantityRepository
 from api.repositories.product_repository import ProductRepository
 from api.serializers.responses.product_quantity_response_serializer import (
@@ -14,7 +15,6 @@ from utils.exceptions.api_exceptions import (
     UnprocessableEntityException,
 )
 from utils.validations.api_validations import ApiValidations
-from api.repositories.order_repository import OrderRepository
 
 
 class ProductQuantityService:
@@ -44,6 +44,8 @@ class ProductQuantityService:
         self.validator.is_null(order_id)
 
         self.__validate_product_quantity(product_quantity, order_id)
+        order = self.__get_order(order_id)
+        self.order_repository.validate_order_closed(order)
 
         created_product_quantity = self.repository.create_product_quantity(
             product_quantity,
@@ -54,7 +56,7 @@ class ProductQuantityService:
         self.__increase_total_price(
             created_product_quantity.product.id,
             created_product_quantity.quantity,
-            order_id,
+            order,
         )
 
         return ProductQuantityResponseSerializer(
@@ -73,13 +75,16 @@ class ProductQuantityService:
         self.validator.is_null(id)
 
         product_quantity = self.__get_product_quantity_by_id(order_id, id)
+        order = self.__get_order(order_id)
+        self.order_repository.validate_order_closed(order)
+
         deleted_product_quantity = self.repository.delete_product_quantity(
             product_quantity
         )
         self.__increase_total_price(
             deleted_product_quantity.product.id,
             deleted_product_quantity.quantity * GenericConstants.NEGATIVE_INDEX,
-            order_id,
+            order,
         )
 
         return ProductQuantityResponseSerializer(
@@ -118,6 +123,9 @@ class ProductQuantityService:
         product_quantity = self.__get_product_quantity_by_id(order_id, id)
         old_quantity = product_quantity.quantity
 
+        order = self.__get_order(order_id)
+        self.order_repository.validate_order_closed(order)
+
         updated_product_quantity = self.repository.update_product_quantity_quantity(
             product_quantity, new_product_quantity.get(GenericConstants.QUANTITY)
         )
@@ -125,28 +133,12 @@ class ProductQuantityService:
         self.__increase_total_price(
             updated_product_quantity.product.id,
             updated_product_quantity.quantity - old_quantity,
-            order_id,
+            order,
         )
 
         return ProductQuantityResponseSerializer(
             updated_product_quantity,
             many=False,
-        )
-
-    def __decrease_total_price(self, id, quantity, order_id):
-        """
-        Decreases th total price of the order.
-
-        :param uuid id: The product quantity identifier.
-        :param int quantity: The product_quantity quantity.
-        :param uuid4 order_id: The order identifier.
-        """
-        product_price = self.__get_product_price(id)
-        decreased_price = quantity * product_price
-
-        order = self.__get_order(order_id)
-        self.order_repository.update_order_total_price(
-            order, order.total_price - decreased_price
         )
 
     def __get_order(self, id):
@@ -172,7 +164,13 @@ class ProductQuantityService:
         """
         self.validator.is_null(id)
 
-        return self.product_repository.get_product_by_id(id).first().price
+        products = self.product_repository.get_product_by_id(id)
+        if products.count() == 0:
+            raise UnprocessableEntityException(
+                ExceptionConstants.PRODUCT_NOT_AVAILABLE % {GenericConstants.ID: id}
+            )
+
+        return products.first().price
 
     def __get_product_quantity_by_id(self, order_id, id):
         """
@@ -194,18 +192,17 @@ class ProductQuantityService:
 
         return product_quantity.first()
 
-    def __increase_total_price(self, id, quantity, order_id):
+    def __increase_total_price(self, id, quantity, order):
         """
         Increases th total price of the order.
 
         :param uuid id: The product quantity identifier.
         :param int quantity: The product_quantity quantity.
-        :param uuid4 order_id: The order identifier.
+        :param Order order: The order to be updated.
         """
         product_price = self.__get_product_price(id)
         decreased_price = quantity * product_price
 
-        order = self.__get_order(order_id)
         self.order_repository.update_order_total_price(
             order, order.total_price + decreased_price
         )
