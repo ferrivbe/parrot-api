@@ -10,7 +10,7 @@ dev: ## run the project with development tools and configurations
 
 .PHONY: up
 up: ## run the project
-	@docker-compose up -d --build
+	@docker-compose up --build
 
 .PHONY: stop
 stop: ## stop Docker containers without removing them
