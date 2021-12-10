@@ -67,6 +67,20 @@ class ExceptionConstants:
     The exception when password is not set.
     """
 
+    QUANTITY_FOR_PRODUCT_EXISTS = (
+        "A product quantity for product with id '%(id)s' already exists."
+    )
+    """
+    The exception when a product quantity for product id already exists.
+    """
+
+    QUANTITY_FOR_PRODUCT_NOT_FOUND = (
+        "The product quantity for product with id '%(id)s' does not exist."
+    )
+    """
+    The exception when a product quantity by identifier does not exist.
+    """
+
     SUPER_USER_ROLE_INVALID = "Superuser must have role of Global Admin"
     """
     The exception when a user is not an admin.
@@ -95,6 +109,11 @@ class ExceptionConstants:
     VALID_PRICE_MUST_BE_SET = "A valid price, greater than zero, must be set."
     """
     The exception when price is None or lower than zero.
+    """
+
+    VALID_QUANTITY_MUST_BE_SET = "A valid quantity, greater than zero, must be set."
+    """
+    The exception when quantity is None or lower than zero.
     """
 
 
@@ -176,6 +195,11 @@ class GenericConstants:
     NAME = "name"
     """
     The name.
+    """
+
+    NEGATIVE_INDEX = -1
+    """
+    The negative index.
     """
 
     ORDER = "order"

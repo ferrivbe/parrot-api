@@ -41,6 +41,22 @@ class ProductQuantityRepository:
             order_id=order_id,
         )
 
+    def get_product_quantity_by_id(self, order_id, id):
+        """
+        Gets a product quantity by identifier.
+
+        :param uuid4 order_id: The order identifier.
+        :param uuid4 id: The product quantity identifier.
+        """
+        self.validator.is_null(order_id)
+        self.validator.is_null(id)
+
+        return ProductQuantity.objects.filter(
+            id=id,
+            order_id=order_id,
+            deleted_at=None,
+        )
+
     def get_product_quantity_by_order_id_and_product_id(self, order_id, product_id):
         """
         Gets a product quantity by order identifier and product identifier.
@@ -56,6 +72,19 @@ class ProductQuantityRepository:
             product_id=product_id,
             deleted_at=None,
         )
+
+    def delete_product_quantity(self, product_quantity):
+        """
+        Deletes a product quantity.
+
+        :param ProductQuantity product_quantity: The product quantity to be deleted.
+        """
+        self.validator.is_null(product_quantity)
+
+        product_quantity.deleted_at = now()
+        product_quantity.save()
+
+        return product_quantity
 
     def delete_product_quantity_by_order_id(self, order_id):
         """
@@ -82,7 +111,7 @@ class ProductQuantityRepository:
         self.validator.is_null(product_quantity)
         self.validator.is_null(new_quantity)
 
-        product_quantity.quantity = product_quantity.quantity + new_quantity
+        product_quantity.quantity = new_quantity
         product_quantity.updated_at = now()
         product_quantity.save()
 

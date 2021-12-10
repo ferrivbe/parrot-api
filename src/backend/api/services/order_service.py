@@ -13,7 +13,6 @@ from utils.exceptions.api_exceptions import (
     UnprocessableEntityException,
 )
 from utils.validations.api_validations import ApiValidations
-from django.core.serializers import serialize
 
 
 class OrderService:
@@ -147,6 +146,12 @@ class OrderService:
         :param uuid4 product_id: The product identifier.
         :param ProductQuantitySerializer.data product_quantity: The product quantity.
         """
+        quantity = product_quantity.get(GenericConstants.QUANTITY)
+        if quantity <= 0 or quantity is None:
+            raise UnprocessableEntityException(
+                ExceptionConstants.VALID_QUANTITY_MUST_BE_SET
+            )
+
         existing_product_quantity = self.product_quantity_repository.get_product_quantity_by_order_id_and_product_id(
             order_id,
             product_id,
@@ -159,9 +164,13 @@ class OrderService:
                 product_id,
             ).quantity
         else:
+            new_quantity = (
+                product_quantity.get(GenericConstants.QUANTITY)
+                + existing_product_quantity.first().quantity
+            )
             self.product_quantity_repository.update_product_quantity_quantity(
                 existing_product_quantity.first(),
-                product_quantity.get(GenericConstants.QUANTITY),
+                new_quantity,
             )
 
             return product_quantity.get(GenericConstants.QUANTITY)
