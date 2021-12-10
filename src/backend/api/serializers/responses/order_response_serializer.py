@@ -7,7 +7,7 @@ from rest_framework.serializers import ModelSerializer
 
 from api.models.order import Order
 from api.serializers.responses.product_quantity_response_serializer import (
-    ProductQuentityResponseSerializer,
+    ProductQuantityResponseSerializer,
 )
 
 
@@ -16,13 +16,15 @@ class OrderResponseSerializer(ModelSerializer):
     The order response serializer.
     """
 
-    product_quantities = ProductQuentityResponseSerializer(required=True, many=True)
+    product_quantities = ProductQuantityResponseSerializer(required=True, many=True)
 
     class Meta:
         model = Order
         fields = [
+            "id",
+            "created_at",
             "external_client",
             "total_price",
             "product_quantities",
         ]
-        depth = 1
+        depth = 2

@@ -20,4 +20,3 @@ class ProductSerializer(ModelSerializer):
             "description",
             "price",
         ]
-        depth = 1

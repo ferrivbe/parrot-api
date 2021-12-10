@@ -9,23 +9,47 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0002_order'),
+        ("api", "0002_order"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ProductQuantity',
+            name="ProductQuantity",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
-                ('quantity', models.IntegerField(null=True)),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('updated_at', models.DateTimeField(default=None, null=True)),
-                ('deleted_at', models.DateTimeField(default=None, null=True)),
-                ('order', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='order', to='api.order')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='product_quantity', to='api.product')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, primary_key=True, serialize=False
+                    ),
+                ),
+                ("quantity", models.IntegerField(null=True)),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                ("updated_at", models.DateTimeField(default=None, null=True)),
+                ("deleted_at", models.DateTimeField(default=None, null=True)),
+                (
+                    "order",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="order",
+                        to="api.order",
+                    ),
+                ),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="product_quantity",
+                        to="api.product",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'product_quantity',
+                "db_table": "product_quantity",
             },
         ),
     ]

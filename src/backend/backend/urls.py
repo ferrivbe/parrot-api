@@ -18,11 +18,6 @@ from rest_framework import permissions
 
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView,
-)
 
 from backend.utils.health import HealthView
 
@@ -57,8 +52,4 @@ urlpatterns = [
         schema_view.with_ui("redoc", cache_timeout=0),
         name="schema-redoc",
     ),
-    # authentication
-    path("auth/tokens", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("auth/tokens/refresh", TokenRefreshView.as_view(), name="token_refresh"),
-    path("auth/tokens/verify", TokenVerifyView.as_view(), name="token_verify"),
 ]

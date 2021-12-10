@@ -10,23 +10,56 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=32, null=True, validators=[django.core.validators.RegexValidator(message='This parameter does not comply with allowed characters.', regex="^[A-Z a-z Ñ ñ . ' _]+$")])),
-                ('description', models.CharField(max_length=128, null=True, validators=[django.core.validators.RegexValidator(message='This parameter does not comply with allowed characters.', regex="^[A-Z a-z Ñ ñ . ' _]+$")])),
-                ('price', models.IntegerField(null=True)),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('updated_at', models.DateTimeField(default=None, null=True)),
-                ('deleted_at', models.DateTimeField(default=None, null=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, primary_key=True, serialize=False
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=32,
+                        null=True,
+                        validators=[
+                            django.core.validators.RegexValidator(
+                                message="This parameter does not comply with allowed characters.",
+                                regex="^[A-Z a-z Ñ ñ . ' _]+$",
+                            )
+                        ],
+                    ),
+                ),
+                (
+                    "description",
+                    models.CharField(
+                        max_length=128,
+                        null=True,
+                        validators=[
+                            django.core.validators.RegexValidator(
+                                message="This parameter does not comply with allowed characters.",
+                                regex="^[A-Z a-z Ñ ñ . ' _]+$",
+                            )
+                        ],
+                    ),
+                ),
+                ("price", models.IntegerField(null=True)),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                ("updated_at", models.DateTimeField(default=None, null=True)),
+                ("deleted_at", models.DateTimeField(default=None, null=True)),
             ],
             options={
-                'db_table': 'product',
+                "db_table": "product",
             },
         ),
     ]

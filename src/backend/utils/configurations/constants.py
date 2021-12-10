@@ -20,6 +20,11 @@ class ExceptionConstants:
     The exception when email is not set.
     """
 
+    EXTERNAL_CLIENT_NAME_MISSING = "The external client name is missing."
+    """
+    The exception when the external client name is missing.
+    """
+
     INVALID_CREDENTIALS = "Invalid password or credentials."
     """
     The exception when the credentials are invalid.
@@ -28,6 +33,11 @@ class ExceptionConstants:
     NAME_ALREADY_IN_USE = "The name '%(name)s' is already in use."
     """
     The exception when a user name already exists.
+    """
+
+    ORDER_NOT_FOUND = "The order with identifier '%(id)s' does not exist."
+    """
+    The exception when an order is not found.
     """
 
     PRODUCT_BY_ID_NOT_FOUND = "The product with id '%(id)s' does not exist."

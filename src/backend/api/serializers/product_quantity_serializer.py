@@ -9,7 +9,7 @@ from api.models.product_quantity import ProductQuantity
 from api.serializers.product_serializer import ProductSerializer
 
 
-class ProductQuentitySerializer(ModelSerializer):
+class ProductQuantitySerializer(ModelSerializer):
     """
     The product quantity serializer.
     """
@@ -22,4 +22,4 @@ class ProductQuentitySerializer(ModelSerializer):
             "product",
             "quantity",
         ]
-        depth = 1
+        depth = 2

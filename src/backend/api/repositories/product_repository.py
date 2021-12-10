@@ -6,7 +6,8 @@ Creation date: 2021-12-07
 from django.utils.timezone import now
 
 from api.models.product import Product
-from utils.configurations.constants import GenericConstants
+from utils.configurations.constants import ExceptionConstants, GenericConstants
+from utils.exceptions.api_exceptions import UnprocessableEntityException
 from utils.validations.api_validations import ApiValidations
 
 
@@ -85,3 +86,14 @@ class ProductRepository:
         product.save()
 
         return product
+
+    def validate_product_price(self, price):
+        """
+        Validates the product price.
+
+        :param int price: The product price.
+        """
+        if price is None or price <= 0:
+            raise UnprocessableEntityException(
+                ExceptionConstants.VALID_PRICE_MUST_BE_SET
+            )

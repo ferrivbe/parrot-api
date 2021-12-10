@@ -25,7 +25,7 @@ class ProductQuantity(models.Model):
 
     order = models.ForeignKey(
         Order,
-        related_name=GenericConstants.ORDER,
+        related_name=GenericConstants.PRODUCT_QUANTITIES,
         on_delete=models.CASCADE,
     )
 

@@ -21,4 +21,3 @@ class ProductResponseSerializer(ModelSerializer):
             "description",
             "price",
         ]
-        depth = 1

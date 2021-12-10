@@ -11,7 +11,7 @@ from api.serializers.responses.product_response_serializer import (
 )
 
 
-class ProductQuentityResponseSerializer(ModelSerializer):
+class ProductQuantityResponseSerializer(ModelSerializer):
     """
     The product quantity response serializer.
     """

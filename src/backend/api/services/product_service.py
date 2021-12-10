@@ -41,7 +41,7 @@ class ProductService:
         price = product.get(GenericConstants.PRICE)
 
         self.__validate_product_by_name(name)
-        self.__validate_product_price(price)
+        self.repository.validate_product_price(price)
 
         return ProductResponseSerializer(
             self.repository.create_product(product), many=False
@@ -128,15 +128,4 @@ class ProductService:
             raise UnprocessableEntityException(
                 ExceptionConstants.PRODUCT_BY_NAME_EXISTS
                 % {GenericConstants.NAME: name}
-            )
-
-    def __validate_product_price(self, price):
-        """
-        Validates the product price.
-
-        :param int price: The product price.
-        """
-        if price is None or price <= 0:
-            raise UnprocessableEntityException(
-                ExceptionConstants.VALID_PRICE_MUST_BE_SET
             )
