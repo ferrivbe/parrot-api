@@ -25,3 +25,9 @@ class ProductReport:
         self.description = description
         self.total_quantity = total_quantity
         self.total_price = total_price
+
+    def __str__(self):
+        """
+        Represents the object ProductReport.
+        """
+        return str(self.id)
