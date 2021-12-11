@@ -7,6 +7,7 @@ from django.urls import path
 
 from api.views.order_view import OrderByIdView, OrderClosureView, OrderView
 from api.views.product_quantity_view import ProductQuantityByIdView, ProductQuantityView
+from api.views.product_report_view import ProductReportView
 from api.views.product_view import ProductByIdView, ProductView
 
 urlpatterns = [
@@ -47,5 +48,11 @@ urlpatterns = [
         "orders/<uuid:order_id>/product-quantities/<uuid:id>",
         ProductQuantityByIdView.as_view(),
         name="orders_product_quantities_id",
+    ),
+    # Prodcut report endpoints.
+    path(
+        "products/reports",
+        ProductReportView.as_view(),
+        name="products_reports",
     ),
 ]

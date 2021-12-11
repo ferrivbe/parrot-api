@@ -3,9 +3,12 @@ File name: product_quantity_repository.py
 Author: Fernando Rivera
 Creation date: 2021-12-08
 """
+from datetime import timedelta, datetime
+from django.db.models.query import Prefetch
 from django.utils.timezone import now
 
 from api.models.product_quantity import ProductQuantity
+from api.models.order import Order
 from utils.configurations.constants import GenericConstants
 from utils.validations.api_validations import ApiValidations
 
@@ -72,6 +75,26 @@ class ProductQuantityRepository:
             product_id=product_id,
             deleted_at=None,
         )
+
+    def get_product_quantity_by_order_closure_date(self, start_date, end_date):
+        """
+        Gets the product quantity by order closure start and end dates.
+
+        :param datetime start_date: The filter start date.
+        :param datetime end_date: The filter end date.
+        """
+        self.validator.is_null(start_date)
+        self.validator.is_null(end_date)
+
+        product_quantities = ProductQuantity.objects.filter(
+            deleted_at=None,
+            order__closed_at__range=[
+                start_date,
+                end_date,
+            ],
+        )
+
+        return product_quantities
 
     def delete_product_quantity(self, product_quantity):
         """

@@ -74,6 +74,11 @@ class ExceptionConstants:
     The exception when a parameter is invalid due to regex validation.
     """
 
+    PARAMETER_MUST_BE_DATETIME = "The parameter '%(parameter)s' is not type datetime."
+    """
+    The exception when a provided parameter is not from type datetime.
+    """
+
     PASSWORD_MUST_BE_SET = "The password must be set"
     """
     The exception when password is not set.
@@ -91,6 +96,13 @@ class ExceptionConstants:
     )
     """
     The exception when a product quantity by identifier does not exist.
+    """
+
+    QUANTITY_FOR_PRODUCT_NOT_FOUND_BY_DATE = (
+        "No product quantity was found from '%(start_date)s' to '%(end_date)s'."
+    )
+    """
+    The exception when no product quantities are found in a specified time range.
     """
 
     SUPER_USER_ROLE_INVALID = "Superuser must have role of Global Admin"
@@ -149,6 +161,11 @@ class GenericConstants:
     The date.
     """
 
+    DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
+    """
+    The date format.
+    """
+
     DELETED_AT = "deleted_at"
     """
     The deletion date.
@@ -167,6 +184,11 @@ class GenericConstants:
     EMPTY_CHAR = ""
     """
     The empty char.
+    """
+
+    END_DATE = "end_date"
+    """
+    The end date.
     """
 
     EXPIRES_IN = "expires_in"
@@ -267,6 +289,11 @@ class GenericConstants:
     SPACE = " "
     """
     The space.
+    """
+
+    START_DATE = "start_date"
+    """
+    The start date.
     """
 
     TOTAL_PRICE = "total_price"

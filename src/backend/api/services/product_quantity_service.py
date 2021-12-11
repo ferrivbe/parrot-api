@@ -3,11 +3,16 @@ File name: product_quantity_service.py
 Author: Fernando Rivera
 Creation date: 2021-12-08
 """
+from operator import attrgetter
+from api.models.product_report import ProductReport
 from api.repositories.order_repository import OrderRepository
 from api.repositories.product_quantity_repository import ProductQuantityRepository
 from api.repositories.product_repository import ProductRepository
 from api.serializers.responses.product_quantity_response_serializer import (
     ProductQuantityResponseSerializer,
+)
+from api.serializers.responses.product_report_response_serializer import (
+    ProductReportResponseSerializer,
 )
 from utils.configurations.constants import ExceptionConstants, GenericConstants
 from utils.exceptions.api_exceptions import (
@@ -107,6 +112,45 @@ class ProductQuantityService:
             many=False,
         )
 
+    def get_product_quantity_by_order_closure_date(self, start_date, end_date):
+        """
+        Gets the product quantity by order closure start and end dates.
+
+        :param datetime start_date: The filter start date.
+        :param datetime end_date: The filter end date.
+        """
+        self.validator.is_null(start_date)
+        self.validator.is_null(end_date)
+
+        product_quantities = self.repository.get_product_quantity_by_order_closure_date(
+            start_date,
+            end_date,
+        )
+        self.__validate_product_quantity_exists(
+            product_quantities,
+            start_date,
+            end_date,
+        )
+
+        product_totals = []
+
+        for product_quantity in product_quantities:
+            found_product_total = self.__find_product_total(
+                product_totals, product_quantity.product.id
+            )
+
+            if found_product_total is not None:
+                self.__update_product_total(
+                    product_totals,
+                    found_product_total,
+                    product_quantity,
+                )
+            else:
+                product_totals.append(self.__create_product_total(product_quantity))
+        product_totals.sort(key=attrgetter("total_quantity"), reverse=True)
+
+        return ProductReportResponseSerializer(product_totals, many=True).data
+
     def update_product_quantity_by_id(self, new_product_quantity, order_id, id):
         """
         Updates a product quantity by identifier.
@@ -139,6 +183,41 @@ class ProductQuantityService:
         return ProductQuantityResponseSerializer(
             updated_product_quantity,
             many=False,
+        )
+
+    def __create_product_total(self, product_quantity):
+        """
+        Creates a product report object.
+
+        :param ProductQuantity product_quantity: The product quantity.
+        """
+        self.validator.is_null(product_quantity)
+
+        return ProductReport(
+            id=product_quantity.product.id,
+            name=product_quantity.product.name,
+            description=product_quantity.product.description,
+            total_quantity=product_quantity.quantity,
+            total_price=product_quantity.quantity * product_quantity.product.price,
+        )
+
+    def __find_product_total(self, product_totals, product_id):
+        """
+        Finds a product total form list.
+
+        :param ProductReport[] prodcut_totals: The product totals list.
+        :param uuid4 product_id: The product identifier.
+        """
+        self.validator.is_null(product_totals)
+        self.validator.is_null(product_id)
+
+        return next(
+            (
+                product_total
+                for product_total in product_totals
+                if product_total.id == product_id
+            ),
+            None,
         )
 
     def __get_order(self, id):
@@ -207,6 +286,28 @@ class ProductQuantityService:
             order, order.total_price + decreased_price
         )
 
+    def __update_product_total(
+        self, product_totals, found_product_total, product_quantity
+    ):
+        """
+        Updates a product total.
+
+        :param ProductReport[] product totals: The product totals list.
+        :param ProductReport found_product_total: The found product total in list.
+        :param ProductQuantity product_quantity: The product quantity to be updated.
+        """
+        self.validator.is_null(product_totals)
+        self.validator.is_null(found_product_total)
+        self.validator.is_null(product_quantity)
+
+        index = product_totals.index(found_product_total)
+        product_totals[index].total_quantity = (
+            product_totals[index].total_quantity + product_quantity.quantity
+        )
+        product_totals[index].total_price = product_totals[index].total_price + (
+            product_quantity.quantity * product_quantity.product.price
+        )
+
     def __validate_product_exists(self, id):
         """
         Validates if product by identifier exsits.
@@ -246,6 +347,25 @@ class ProductQuantityService:
             raise UnprocessableEntityException(
                 ExceptionConstants.QUANTITY_FOR_PRODUCT_EXISTS
                 % {GenericConstants.ID: product_id}
+            )
+
+    def __validate_product_quantity_exists(
+        self, product_quantities, start_date, end_date
+    ):
+        """
+        Validates if product quantities exist.
+
+        :param ProductQauntity[] product_quantities: The product quantities to be verified.
+        :param datetime start_date: The start date.
+        :param datetime end_date: The end date.
+        """
+        if product_quantities.count() == 0:
+            raise NotFoundException(
+                ExceptionConstants.QUANTITY_FOR_PRODUCT_NOT_FOUND_BY_DATE
+                % {
+                    GenericConstants.START_DATE: start_date,
+                    GenericConstants.END_DATE: end_date,
+                }
             )
 
     def __validate_product_quantity_quantity(self, product_quantity):
