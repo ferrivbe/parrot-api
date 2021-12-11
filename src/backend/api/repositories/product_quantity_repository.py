@@ -3,12 +3,9 @@ File name: product_quantity_repository.py
 Author: Fernando Rivera
 Creation date: 2021-12-08
 """
-from datetime import timedelta, datetime
-from django.db.models.query import Prefetch
 from django.utils.timezone import now
 
 from api.models.product_quantity import ProductQuantity
-from api.models.order import Order
 from utils.configurations.constants import GenericConstants
 from utils.validations.api_validations import ApiValidations
 

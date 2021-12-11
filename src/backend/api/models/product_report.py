@@ -1,9 +1,8 @@
 """
 File name: product.py
 Author: Fernando Rivera
-Creation date: 2021-12-07
+Creation date: 2021-12-11
 """
-from utils.exceptions.api_exceptions import InternalServerErrorException
 
 
 class ProductReport:

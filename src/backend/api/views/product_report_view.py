@@ -3,8 +3,6 @@ File name: product_report_view.py
 Author: Fernando Rivera
 Creation date: 2021-12-10
 """
-from datetime import datetime
-from utils.configurations.constants import GenericConstants, ExceptionConstants
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -16,9 +14,9 @@ from api.serializers.responses.product_report_response_serializer import (
     ProductReportResponseSerializer,
 )
 from api.services.product_quantity_service import ProductQuantityService
+from utils.configurations.constants import GenericConstants
 from utils.exceptions.serializers.api_exception_serializer import ApiExceptionSerializer
 from utils.validations.api_validations import ApiValidations
-from utils.exceptions.api_exceptions import BadRequestException
 
 
 class ProductReportView(APIView):

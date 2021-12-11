@@ -4,6 +4,7 @@ Author: Fernando Rivera
 Creation date: 2021-12-08
 """
 from operator import attrgetter
+
 from api.models.product_report import ProductReport
 from api.repositories.order_repository import OrderRepository
 from api.repositories.product_quantity_repository import ProductQuantityRepository

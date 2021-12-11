@@ -3,10 +3,11 @@ File name: api_validations.py
 Author: Fernando Rivera
 Creation date: 2021-12-08
 """
-from datetime import datetime, date
-from utils.exceptions.api_exceptions import BadRequestException
+from datetime import datetime
+
 from utils.configurations.constants import ExceptionConstants, GenericConstants
 from utils.exceptions.api_exceptions import (
+    BadRequestException,
     ForbiddenEntityException,
     InternalServerErrorException,
 )
