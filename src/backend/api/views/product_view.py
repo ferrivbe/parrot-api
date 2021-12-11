@@ -131,6 +131,7 @@ class ProductByIdView(APIView):
                 format=openapi.FORMAT_UUID,
             ),
         ],
+        request_body=ProductSerializer(),
         responses={
             200: openapi.Response("Product found.", ProductResponseSerializer()),
             401: openapi.Response(
