@@ -80,6 +80,19 @@ class OrderService:
 
         return OrderResponseSerializer(deleted_order, many=False)
 
+    def get_order_by_id(self, id):
+        """
+        Gets an order by identifier.
+
+        :param uuid4 id:The order identifier.
+        """
+        self.validator.is_null(id)
+
+        orders = self.repository.get_order_by_id(id)
+        self.__validate_order_exists(orders, id)
+
+        return OrderResponseSerializer(orders.first(), many=False)
+
     def update_order_by_id(self, order, id):
         """
         Updates an order by identifier.
@@ -123,19 +136,6 @@ class OrderService:
             closed_order,
             many=False,
         )
-
-    def get_order_by_id(self, id):
-        """
-        Gets an order by identifier.
-
-        :param uuid4 id:The order identifier.
-        """
-        self.validator.is_null(id)
-
-        orders = self.repository.get_order_by_id(id)
-        self.__validate_order_exists(orders, id)
-
-        return OrderResponseSerializer(orders.first(), many=False)
 
     def __create_product(self, product):
         """

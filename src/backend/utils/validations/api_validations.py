@@ -53,14 +53,15 @@ class ApiValidations:
                 ExceptionConstants.USER_ROLE_NOT_VALID % {GenericConstants.ROLE: role}
             )
 
-    def validate_date(self, date):
+    def validate_date(self, date, default_date):
         """
         Validates a date.
 
         :param datetime date: The date to validate.
+        :param datetime default_date: The default date.
         """
         try:
-            validated_date = datetime.min
+            validated_date = default_date
             if date is not None:
                 validated_date = datetime.strptime(date, GenericConstants.DATE_FORMAT)
 

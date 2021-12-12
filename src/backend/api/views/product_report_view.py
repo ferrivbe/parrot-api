@@ -3,6 +3,9 @@ File name: product_report_view.py
 Author: Fernando Rivera
 Creation date: 2021-12-10
 """
+from datetime import datetime
+
+from django.utils.timezone import make_aware, now
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -79,10 +82,12 @@ class ProductReportView(APIView):
         :param uuid4 id: The product identifier.
         """
         start_date = self.validator.validate_date(
-            request.GET.get(GenericConstants.START_DATE)
+            request.GET.get(GenericConstants.START_DATE),
+            make_aware(datetime.min),
         )
         end_date = self.validator.validate_date(
-            request.GET.get(GenericConstants.END_DATE)
+            request.GET.get(GenericConstants.END_DATE),
+            now(),
         )
 
         product_report = self.service.get_product_quantity_by_order_closure_date(
