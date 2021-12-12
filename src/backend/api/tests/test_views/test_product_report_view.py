@@ -30,39 +30,31 @@ class TestProductReportView(APITestCase):
         self.product_quantity_id = uuid4()
         self.order_id = uuid4()
 
-        self.product, self.product_quantity, self.order = self.create_models(
+        self.create_models(
             self.product_id,
             self.product_quantity_id,
             self.order_id,
             None,
-            None,
+            now(),
         )
 
         self.deleted_product_id = uuid4()
         self.deleted_product_quantity_id = uuid4()
         self.deleted_order_id = uuid4()
 
-        (
-            self.deleted_product,
-            self.deleted_product_quantity,
-            self.deleted_order,
-        ) = self.create_models(
+        self.create_models(
             self.deleted_product_id,
             self.deleted_product_quantity_id,
             self.deleted_order_id,
             now(),
-            None,
+            now(),
         )
 
         self.closed_product_id = uuid4()
         self.closed_product_quantity_id = uuid4()
         self.closed_order_id = uuid4()
 
-        (
-            self.closed_product,
-            self.closed_product_quantity,
-            self.closed_order,
-        ) = self.create_models(
+        self.create_models(
             self.closed_product_id,
             self.closed_product_quantity_id,
             self.closed_order_id,
@@ -122,6 +114,10 @@ class TestProductReportView(APITestCase):
         # arrange
         self.setup()
         url = reverse("products_reports")
+
+        ProductQuantity.objects.filter(id=self.closed_product_quantity_id).update(
+            product_id=self.product_id
+        )
 
         # act
         self.client.force_authenticate(user=self.user)
