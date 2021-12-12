@@ -229,7 +229,7 @@ class ProductQuantityService:
         """
         orders = self.order_repository.get_order_by_id(id)
 
-        if orders.count == 0 or orders is None:
+        if orders.count() == 0 or orders is None:
             raise NotFoundException(
                 ExceptionConstants.ORDER_NOT_FOUND % {GenericConstants.ID: id}
             )

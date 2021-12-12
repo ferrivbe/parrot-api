@@ -266,6 +266,6 @@ class ProductQuantityView(APIView):
                 order_id,
             )
 
-            return Response(product_created.data, status=status.HTTP_200_OK)
+            return Response(product_created.data, status=status.HTTP_201_CREATED)
 
         raise BadRequestException(request_serializer.errors)
