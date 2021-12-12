@@ -1,8 +1,18 @@
 ## django-api
 
-### Running the development environment
+### Running the production environment
 
 * `make up`
+
+### Running the testing environment
+
+* `make dev`
+* `dev test`
+* `dev cov` For test coverage.
+
+### Running the development environment
+
+* `make dev`
 * `dev up`
 
 ##### Rebuilding the base Docker image
@@ -13,9 +23,28 @@
 
 * `make reset`
 
-### Hostnames for accessing the service directly
+### Hostnames for accessing the development service directly
 
 * Local: http://127.0.0.1:8000
+
+### Hostnames for accessing the local production service directly
+
+* Local: http://127.0.0.1
+
+### Recomended environment schema
+
+For testing purposes, we provide an example of enviroment variables.
+```
+DEBUG=False
+APP_LOGGING_LEVEL=WARN
+DB_LOGGING_LEVEL=WARN
+PYTHONDONTWRITEBYTECODE=1
+
+POSTGRES_DB=postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_HOSTNAME=postgres
+```
 
 
 ### About building local environment with Linux systems
