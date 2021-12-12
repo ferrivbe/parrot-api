@@ -23,6 +23,7 @@ class OrderResponseSerializer(ModelSerializer):
         fields = [
             "id",
             "created_at",
+            "closed_at",
             "external_client",
             "total_price",
             "product_quantities",

@@ -5,11 +5,7 @@ Creation date: 2021-12-08
 """
 from django.urls import path
 
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView,
-)
+from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 
 from auth_api.views.user_view import UserLoginView, UserView
 

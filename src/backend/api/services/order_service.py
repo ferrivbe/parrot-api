@@ -13,7 +13,6 @@ from utils.exceptions.api_exceptions import (
     UnprocessableEntityException,
 )
 from utils.validations.api_validations import ApiValidations
-from django.core.serializers import serialize
 
 
 class OrderService:
@@ -81,6 +80,19 @@ class OrderService:
 
         return OrderResponseSerializer(deleted_order, many=False)
 
+    def get_order_by_id(self, id):
+        """
+        Gets an order by identifier.
+
+        :param uuid4 id:The order identifier.
+        """
+        self.validator.is_null(id)
+
+        orders = self.repository.get_order_by_id(id)
+        self.__validate_order_exists(orders, id)
+
+        return OrderResponseSerializer(orders.first(), many=False)
+
     def update_order_by_id(self, order, id):
         """
         Updates an order by identifier.
@@ -94,6 +106,7 @@ class OrderService:
         orders = self.repository.get_order_by_id(id)
         self.__validate_order_exists(orders, id)
         self.__validate_order(order)
+        self.repository.validate_order_closed(orders.first())
 
         updated_order = self.repository.update_order_external_client(
             orders.first(),
@@ -105,18 +118,24 @@ class OrderService:
             many=False,
         )
 
-    def get_order_by_id(self, id):
+    def update_order_closure(self, id):
         """
-        Gets an order by identifier.
+        Updates the order closure.
 
-        :param uuid4 id:The order identifier.
+        :param uuid4 id: The order identifier.
         """
         self.validator.is_null(id)
 
         orders = self.repository.get_order_by_id(id)
         self.__validate_order_exists(orders, id)
+        self.repository.validate_order_closed(orders.first())
 
-        return OrderResponseSerializer(orders.first(), many=False)
+        closed_order = self.repository.update_order_closure(orders.first())
+
+        return OrderResponseSerializer(
+            closed_order,
+            many=False,
+        )
 
     def __create_product(self, product):
         """
@@ -147,6 +166,12 @@ class OrderService:
         :param uuid4 product_id: The product identifier.
         :param ProductQuantitySerializer.data product_quantity: The product quantity.
         """
+        quantity = product_quantity.get(GenericConstants.QUANTITY)
+        if quantity <= 0 or quantity is None:
+            raise UnprocessableEntityException(
+                ExceptionConstants.VALID_QUANTITY_MUST_BE_SET
+            )
+
         existing_product_quantity = self.product_quantity_repository.get_product_quantity_by_order_id_and_product_id(
             order_id,
             product_id,
@@ -159,9 +184,13 @@ class OrderService:
                 product_id,
             ).quantity
         else:
+            new_quantity = (
+                product_quantity.get(GenericConstants.QUANTITY)
+                + existing_product_quantity.first().quantity
+            )
             self.product_quantity_repository.update_product_quantity_quantity(
                 existing_product_quantity.first(),
-                product_quantity.get(GenericConstants.QUANTITY),
+                new_quantity,
             )
 
             return product_quantity.get(GenericConstants.QUANTITY)

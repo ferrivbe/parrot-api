@@ -20,3 +20,20 @@ class ProductSerializer(ModelSerializer):
             "description",
             "price",
         ]
+
+
+class ProductByIdSerializer(ModelSerializer):
+    """
+    The product by identifier serializer.
+    """
+
+    class Meta:
+        model = Product
+        fields = [
+            "id",
+        ]
+        extra_kwargs = {
+            "id": {
+                "validators": [],
+            }
+        }

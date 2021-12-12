@@ -30,7 +30,7 @@ class OrderByIdView(APIView):
         Creates a new instance of OrderByIdView.
         """
         self.permission_classes = (permissions.IsAuthenticated,)
-        self.serializer = OrderSerializer
+        self.serializer = OrderUpdateSerializer
         self.service = OrderService()
         self.validator = ApiValidations()
 
@@ -46,7 +46,7 @@ class OrderByIdView(APIView):
             openapi.Parameter(
                 "id",
                 openapi.IN_PATH,
-                "The product identifier.",
+                "The order identifier.",
                 type=openapi.TYPE_STRING,
                 format=openapi.FORMAT_UUID,
             ),
@@ -86,7 +86,7 @@ class OrderByIdView(APIView):
             openapi.Parameter(
                 "id",
                 openapi.IN_PATH,
-                "The product identifier.",
+                "The order identifier.",
                 type=openapi.TYPE_STRING,
                 format=openapi.FORMAT_UUID,
             ),
@@ -126,7 +126,7 @@ class OrderByIdView(APIView):
             openapi.Parameter(
                 "id",
                 openapi.IN_PATH,
-                "The product identifier.",
+                "The order identifier.",
                 type=openapi.TYPE_STRING,
                 format=openapi.FORMAT_UUID,
             ),
@@ -160,6 +160,60 @@ class OrderByIdView(APIView):
             return Response(order_updated.data, status=status.HTTP_200_OK)
 
         raise BadRequestException(request_serializer.errors)
+
+
+class OrderClosureView(APIView):
+    """
+    The order closure view.
+
+    Manage requests for order objects, in closed_at parameter.
+    """
+
+    def __init__(self):
+        """
+        Creates a new instance of OrderClosureView.
+        """
+        self.permission_classes = (permissions.IsAuthenticated,)
+        self.service = OrderService()
+
+    @swagger_auto_schema(
+        operation_description="Patches an order closure.",
+        manual_parameters=[
+            openapi.Parameter(
+                "Authorization",
+                openapi.IN_HEADER,
+                "The user authorization.",
+                type=openapi.TYPE_STRING,
+            ),
+            openapi.Parameter(
+                "id",
+                openapi.IN_PATH,
+                "The order identifier.",
+                type=openapi.TYPE_STRING,
+                format=openapi.FORMAT_UUID,
+            ),
+        ],
+        responses={
+            201: openapi.Response("Order closed.", OrderResponseSerializer()),
+            401: openapi.Response(
+                "User not authorized.", ApiExceptionSerializer(many=False)
+            ),
+            404: openapi.Response("Not found", ApiExceptionSerializer(many=False)),
+            422: openapi.Response("Bad request.", ApiExceptionSerializer(many=False)),
+            500: openapi.Response(
+                "Internal server error.", ApiExceptionSerializer(many=False)
+            ),
+        },
+    )
+    def patch(self, request, id, format=None):
+        """
+        Creates the order.
+
+        :param rest_framework.request request: The request.
+        """
+        order = self.service.update_order_closure(id)
+
+        return Response(order.data, status=status.HTTP_200_OK)
 
 
 class OrderView(APIView):

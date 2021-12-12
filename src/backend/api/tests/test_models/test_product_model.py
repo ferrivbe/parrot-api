@@ -27,7 +27,9 @@ class TestProductModel:
 
         # act
         product_created = Product.objects.create(
-            id=id, name="test_name", description="test_descritpion"
+            id=id,
+            name="test_name",
+            description="test_descritpion",
         )
 
         # assert

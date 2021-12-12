@@ -88,7 +88,7 @@ class ProductService:
 
         products = self.__validate_product_by_id(id)
         self.__validate_product_by_name(name)
-        self.__validate_product_price(price)
+        self.repository.validate_product_price(price)
 
         return ProductResponseSerializer(
             self.repository.update_product(product, products.first()), many=False

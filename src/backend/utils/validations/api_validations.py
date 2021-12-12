@@ -3,8 +3,11 @@ File name: api_validations.py
 Author: Fernando Rivera
 Creation date: 2021-12-08
 """
+from datetime import datetime
+
 from utils.configurations.constants import ExceptionConstants, GenericConstants
 from utils.exceptions.api_exceptions import (
+    BadRequestException,
     ForbiddenEntityException,
     InternalServerErrorException,
 )
@@ -48,4 +51,23 @@ class ApiValidations:
         if role != expected_role:
             raise ForbiddenEntityException(
                 ExceptionConstants.USER_ROLE_NOT_VALID % {GenericConstants.ROLE: role}
+            )
+
+    def validate_date(self, date, default_date):
+        """
+        Validates a date.
+
+        :param datetime date: The date to validate.
+        :param datetime default_date: The default date.
+        """
+        try:
+            validated_date = default_date
+            if date is not None:
+                validated_date = datetime.strptime(date, GenericConstants.DATE_FORMAT)
+
+            return validated_date
+        except ValueError:
+            raise BadRequestException(
+                ExceptionConstants.PARAMETER_MUST_BE_DATETIME
+                % {GenericConstants.PARAMETER: date}
             )
