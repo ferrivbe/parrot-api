@@ -35,7 +35,7 @@
 
 For testing purposes, we provide an example of enviroment variables.
 ```
-DEBUG=False
+DEBUG=True
 APP_LOGGING_LEVEL=WARN
 DB_LOGGING_LEVEL=WARN
 PYTHONDONTWRITEBYTECODE=1

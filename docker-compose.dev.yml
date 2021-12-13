@@ -10,7 +10,7 @@ services:
       - static-data:/code/collected_static
     command: shell
     environment:
-      - DEBUG=False
+      - DEBUG=${DEBUG}
       - APP_LOGGING_LEVEL=${APP_LOGGING_LEVEL}
       - DB_LOGGING_LEVEL=${DB_LOGGING_LEVEL}
       - DJANGO_SETTINGS_MODULE=backend.settings
