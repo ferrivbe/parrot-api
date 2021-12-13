@@ -79,7 +79,8 @@ sudo usermod -aG docker ${USER}
 3- Confirm current user is in docker group
 
 ```
-## If you don't see docker in the list, then you possibly need to log off and log in again in your computer.
+## If you don't see docker in the list, then you possibly need to log off and log in\
+again in your computer.
 id -nG
 ```
 
