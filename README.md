@@ -4,8 +4,8 @@
 
 * `make up`
 
-### Creating superuser for manual testing.
-Superusers can create other users with role 2 (user)
+### Creating superuser for manual testing
+Superusers can create other users with role 2 (user).
 
 * `make dev`
 * `dev su`
