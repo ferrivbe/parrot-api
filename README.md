@@ -76,27 +76,7 @@ make down
 sudo usermod -aG docker ${USER}
 ```
 
-3- Confirm current user is in docker group
-
-```
-## If you don't see docker in the list, then you possibly need to log off and log in
-again in your computer.
-id -nG
-```
-
-
-4-  Get the current user id
-
-```
-## Commonly your user id number is near to 1000
-id -u
-```
-
-5- Replace user id in Dockerfiles by your current user id
-
-Edit `.docker/Dockerfile_base` and replace 1337 by your user id.
-
-6- Rebuild the local environment 
+3- Rebuild the local environment 
 
 ```
 make rebuild
