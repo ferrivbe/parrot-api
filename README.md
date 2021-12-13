@@ -1,4 +1,6 @@
-## django-api
+## parrot-api
+Backend REST API project for parrot challenge, coded in Django,
+documented in Swagger, Redoc and deployed in AWS via CodeDeploy.
 
 ### Running the production environment
 
