@@ -13,7 +13,7 @@ elif [[ "${1}" == "runserver" ]]; then
     exec python3.9 manage.py collectstatic --noinput --clear\
         & python3.9 manage.py makemigrations \
         & python3.9 manage.py migrate \
-        & gunicorn backend.wsgi:application --bind 0.0.0.0:8000
+        & gunicorn --config=gunicorn_config.py backend.wsgi:application
 elif [[ "${1}" == "migrate" ]]; then
     exec pipenv run python3.9 manage.py migrate
 elif [[ "${1}" == "makemigrations" ]]; then

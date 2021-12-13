@@ -1,8 +1,18 @@
-## django-api
+## parrot-api
+Backend REST API project for parrot challenge, coded in Django,
+documented in Swagger, Redoc and deployed in AWS via CodeDeploy.
+
+For API documentation refer to [usage](https://github.com/ferrivbe/parrot-api/blob/dev/doc/usage.md)
 
 ### Running the production environment
 
 * `make up`
+
+### Creating superuser for manual testing
+Superusers can create other users with role 2 (user).
+
+* `make dev`
+* `dev su`
 
 ### Running the testing environment
 
@@ -35,7 +45,7 @@
 
 For testing purposes, we provide an example of enviroment variables.
 ```
-DEBUG=False
+DEBUG=True
 APP_LOGGING_LEVEL=WARN
 DB_LOGGING_LEVEL=WARN
 PYTHONDONTWRITEBYTECODE=1
@@ -69,7 +79,8 @@ sudo usermod -aG docker ${USER}
 3- Confirm current user is in docker group
 
 ```
-## If you don't see docker in the list, then you possibly need to log off and log in again in your computer.
+## If you don't see docker in the list, then you possibly need to log off and log in
+again in your computer.
 id -nG
 ```
 
