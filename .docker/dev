@@ -47,6 +47,9 @@ isort)
 black)
   black .
 ;;
+su)
+  python manage.py createsuperuser
+;;
 pipi)
 
   if [ $# -gt 0 ]; then
